@@ -11,7 +11,7 @@ describe 'facter::fact' do
       ],
     }
 
-    on_supported_os(redhat).each do |os, os_facts|
+    on_supported_os(redhat).each do |_os, os_facts|
       let(:facts) do
         os_facts
       end
@@ -26,7 +26,7 @@ describe 'facter::fact' do
             :facts_dir => '/factsdir',
           }
         end
-    
+
         it {
           should contain_file('facts_file_fact1').with({
             'ensure'  => 'file',
@@ -36,7 +36,7 @@ describe 'facter::fact' do
             'mode'    => '0644',
           })
         }
-    
+
         it {
           should contain_file_line('fact_line_fact1').with({
             'name' => 'fact_line_fact1',
@@ -46,7 +46,7 @@ describe 'facter::fact' do
           })
         }
       end
-    
+
       context 'with fact specified ' do
         let(:title) { 'fact2' }
         let(:params) do
@@ -55,11 +55,11 @@ describe 'facter::fact' do
             :value => 'fact2value',
           }
         end
-    
+
         # Does not contain this file, because we are using the default which is
         # managed in the facter class.
         it { should_not contain_file('facts_file_fact2') }
-    
+
         it {
           should contain_file_line('fact_line_fact2').with({
             'name' => 'fact_line_fact2',
@@ -81,7 +81,7 @@ describe 'facter::fact' do
       ],
     }
 
-    on_supported_os(windows).each do |os, os_facts|
+    on_supported_os(windows).each do |_os, os_facts|
       let(:facts) do
         os_facts
       end
@@ -96,7 +96,7 @@ describe 'facter::fact' do
             :facts_dir => 'C:\factsdir',
           }
         end
-    
+
         it {
           should contain_file('facts_file_fact1').with({
             'ensure'  => 'file',
@@ -105,7 +105,7 @@ describe 'facter::fact' do
             'group'   => 'NT AUTHORITY\SYSTEM',
           })
         }
-    
+
         it {
           should contain_file_line('fact_line_fact1').with({
             'name' => 'fact_line_fact1',
@@ -115,7 +115,7 @@ describe 'facter::fact' do
           })
         }
       end
-    
+
       context 'with fact specified ' do
         let(:title) { 'fact2' }
         let(:params) do
@@ -124,11 +124,11 @@ describe 'facter::fact' do
             :value => 'fact2value',
           }
         end
-    
+
         # Does not contain this file, because we are using the default which is
         # managed in the facter class.
         it { should_not contain_file('facts_file_fact2') }
-    
+
         it {
           should contain_file_line('fact_line_fact2').with({
             'name' => 'fact_line_fact2',

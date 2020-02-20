@@ -57,6 +57,8 @@ Style/FormatStringToken:
 Style/Lambda:
   Description: Prefer the keyword for easier discoverability.
   EnforcedStyle: literal
+Style/NumericLiteralPrefix:
+  Enabled: false
 Style/RegexpLiteral:
   Description: Community preference. See https://github.com/voxpupuli/modulesync_config/issues/168
   EnforcedStyle: percent_r
