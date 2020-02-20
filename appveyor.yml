@@ -23,8 +23,6 @@ install:
     Start-Process msiexec.exe -Wait -NoNewWindow -ArgumentList @("/i", "C:\downloads\puppet-agent-x64-latest.msi", "/qn", "/l*", "$log")
     cd $ENV:APPVEYOR_BUILD_FOLDER
 - ps: Copy-Item -Path $ENV:APPVEYOR_BUILD_FOLDER -Destination C:/ProgramData/PuppetLabs/code/environments/production/modules/facter -Recurse
-- ps: Copy-Item -Path "${ENV:APPVEYOR_BUILD_FOLDER}/lib/facter" -Destination C:/ProgramData/PuppetLabs/puppet/cache/lib/facter -Recurse
-- choco install puppet-bolt
 - set PATH=C:\Program Files\Puppet Labs\Puppet\bin;%PATH%
 - puppet --version
 - puppet module install puppetlabs-stdlib
