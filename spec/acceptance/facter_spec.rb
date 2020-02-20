@@ -58,16 +58,26 @@ describe 'facter class' do
       describe file(facts_d_dir) do
         it { should be_directory }
         it { should be_owned_by facts_d_owner }
-        it { should be_grouped_into facts_d_group }
-        it { should be_mode facts_d_mode }
+        # Serverspec (more specifically
+        # Specinfra::Command::Windows::Base::File) does not support group, mode
+        # or size for files on Windows.
+        if host_inventory['platform'] != 'windows'
+          it { should be_grouped_into facts_d_group }
+          it { should be_mode facts_d_mode }
+        end
       end
 
       describe file(facts_file) do
         it { should be_file }
         it { should be_owned_by facts_file_owner }
-        it { should be_grouped_into facts_file_group }
-        it { should be_mode facts_file_mode }
-        its(:size) { should eq 0 }
+        # Serverspec (more specifically
+        # Specinfra::Command::Windows::Base::File) does not support group, mode
+        # or size for files on Windows.
+        if host_inventory['platform'] != 'windows'
+          it { should be_grouped_into facts_file_group }
+          it { should be_mode facts_file_mode }
+          its(:size) { should eq 0 }
+        end
       end
     end
   end
