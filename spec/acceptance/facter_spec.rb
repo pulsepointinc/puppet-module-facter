@@ -25,14 +25,32 @@ describe 'facter class' do
 
   context 'with default values for all parameters' do
     context 'it should be idempotent' do
-      it 'should work with no errors' do
-        pp = <<-EOS
-        include facter
-        EOS
+      pp = <<-EOS
+      include facter
+      EOS
 
-        # Run it twice and test for idempotency
-        apply_manifest(pp, :catch_failures => true)
-        apply_manifest(pp, :catch_changes  => true)
+      if Gem.win_platform?
+        manifest = 'C:\manifest-default.pp'
+
+        it 'creates manifest' do
+          File.open(manifest, 'w') { |f| f.write(pp) }
+          puts manifest
+          puts File.read(manifest)
+        end
+
+        describe command("puppet apply --debug #{manifest}") do
+          its(:exit_status) { is_expected.not_to eq 1 }
+        end
+
+        describe command("puppet apply --debug #{manifest}") do
+          its(:exit_status) { is_expected.to eq 0 }
+        end
+      else
+        it 'should work with no errors' do
+          # Run it twice and test for idempotency
+          apply_manifest(pp, :catch_failures => true)
+          apply_manifest(pp, :catch_changes  => true)
+        end
       end
     end
 
@@ -82,7 +100,7 @@ describe 'facter class' do
   end
 
   context 'with setting ensure_facter_symlink to true' do
-    if fact('osfamily') == 'Windows'
+    if host_inventory['platform'] == 'windows'
       before { skip('Windows does not have symlinks. Skipping test.') }
     end
 
