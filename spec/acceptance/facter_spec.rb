@@ -83,7 +83,7 @@ describe 'facter class' do
   end
 
   context 'with specifying facts_hash' do
-    it 'should apply the manifest' do
+    context 'should apply the manifest' do
       pp = <<-EOS
       class { 'facter':
         facts_hash => {
@@ -95,7 +95,23 @@ describe 'facter class' do
       }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      if Gem.win_platform?
+        manifest = 'C:\manifest-facts_hash.pp'
+
+        it 'creates manifest' do
+          File.open(manifest, 'w') { |f| f.write(pp) }
+          puts manifest
+          puts File.read(manifest)
+        end
+
+        describe command("puppet apply --debug #{manifest}") do
+          its(:exit_status) { is_expected.to eq 0 }
+        end
+      else
+        it 'should work with no errors' do
+          apply_manifest(pp, :catch_failures => true)
+        end
+      end
     end
 
     context 'and should contain facts' do
@@ -137,14 +153,30 @@ describe 'facter class' do
   end
 
   context 'with specify purge_facts_d as true' do
-    it 'should apply the manifest' do
+    context 'should apply the manifest' do
       pp = <<-EOS
       class { 'facter':
         purge_facts_d => true,
       }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      if Gem.win_platform?
+        manifest = 'C:\manifest-facts_hash.pp'
+
+        it 'creates manifest' do
+          File.open(manifest, 'w') { |f| f.write(pp) }
+          puts manifest
+          puts File.read(manifest)
+        end
+
+        describe command("puppet apply --debug #{manifest}") do
+          its(:exit_status) { is_expected.to eq 0 }
+        end
+      else
+        it 'should work with no errors' do
+          apply_manifest(pp, :catch_failures => true)
+        end
+      end
     end
 
     context 'and should remove facts not managed by puppet' do
